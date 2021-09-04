@@ -1,5 +1,5 @@
 <template>
-  <flow-draw :list="list" />
+  <flow-draw :list="list" :drawNumber="10" />
 </template>
 
 <script lang="ts">

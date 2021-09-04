@@ -32,36 +32,107 @@
       </div>
     </div>
 
-    <!-- <div
+    <div
       class="btn-panel btn-ani flex items-center justify-center"
       :style="turn ? 'opacity: 0' : ''"
       @click="shuffling"
     >
-      {{ isFirst ? "开始洗牌" : drawNumber > 0 ? "再抽一次" : "我知道啦" }}
-    </div> -->
+      {{ isFirst ? "开始洗牌" : "再抽一次" }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import WinnerStyle from "./WinnerStyle.vue";
 
 export default defineComponent({
   components: { WinnerStyle },
   name: "FlowDraw",
-  props: {
-    list: {
-      type: Array,
-      default: function () {
-        return [];
-      },
-    },
-  },
-  // setup: () => {
-  //   const list = reactive([]);
-
-  //   return { list };
+  // props: {
+  //   // 奖品列表
+  //   list: {
+  //     type: Array,
+  //     default: function () {
+  //       return [];
+  //     },
+  //   },
+  //   // 抽奖次数
+  //   drawNumber: {
+  //     type: Number,
+  //     default: 0,
+  //   },
   // },
+  props: ["list", "drawNumber"],
+  setup: (props, context) => {
+    // 锁
+    let lock = false;
+    // 第一次抽奖
+    let isFirst = ref(true);
+    // 翻转
+    const turn = ref(false);
+    // 移动
+    const move = ref(false);
+
+    const shuffling = async () => {
+      // 我知道啦，关闭蒙层
+      if (!isFirst.value && !props.drawNumber) {
+        context.emit("close");
+        return;
+      }
+
+      if (lock || turn.value || !props.drawNumber.value) return;
+
+      // 重置信息
+      // winner_id.value = null;
+      // prize.value = {
+      //   id: 0,
+      //   name: "",
+      //   is_empty: 0,
+      //   turn: false,
+      // };
+
+      // 锁，不让重复点击
+      lock = true;
+      // 第一步，洗牌
+      turn.value = !turn.value;
+      // turnAllPrizes(true);
+
+      // 第二步，卡牌打乱
+      await moving();
+      // 第三步，卡牌回正
+      await moving(false);
+    };
+
+    /**
+     * 翻转所有卡牌
+     */
+    // const turnAllPrizes = (turn: boolean) =>
+    //   props.list.value.forEach((item: any) => {
+    //     item.turn = turn;
+    //   });
+
+    /**
+     * 打乱牌组
+     */
+    const moving = (locked = true) => {
+      if (!locked) {
+        setTimeout(() => {
+          // 锁，不让重复点击
+          lock = locked;
+        }, 1200);
+      }
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          move.value = !move.value;
+          resolve("");
+        }, 1000);
+      });
+    };
+
+    return { isFirst, shuffling };
+  },
 });
 </script>
 
