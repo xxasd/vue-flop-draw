@@ -1,0 +1,217 @@
+<template>
+  <div>
+    <div class="cards-panel flex flex-wrap">
+      <div
+        v-for="(item, index) in list"
+        :key="index"
+        class="card-item inline-flex items-center justify-center"
+        :class="[item.turn ? 'turn' : '', move ? `move-${index}` : '']"
+      >
+        <!-- 中奖样式 -->
+        <winner-style v-if="winner_id && winner_id === index" />
+
+        <!-- 正面样式 -->
+        <div
+          class="card front absolute bg-no-repeat bg-cover flex items-center justify-center"
+          :class="{ normal: !item.is_empty, empty: item.is_empty }"
+        >
+          <div v-if="winner_id && click_index !== index" class="loser absolute"></div>
+          <div class="name text-center" :style="item.is_empty ? 'opacity: 0' : ''">
+            {{ item.name }}
+          </div>
+        </div>
+        <!-- 背面样式 -->
+        <div class="card">
+          <div class="card back absolute bg-no-repeat bg-cover" @click="lottery(index)">
+            <img
+              src="@/assets/images/card_text_img.png"
+              :class="turn ? 'back-img-ani' : ''"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div
+      class="btn-panel btn-ani flex items-center justify-center"
+      :style="turn ? 'opacity: 0' : ''"
+      @click="shuffling"
+    >
+      {{ isFirst ? "开始洗牌" : drawNumber > 0 ? "再抽一次" : "我知道啦" }}
+    </div> -->
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import WinnerStyle from "./WinnerStyle.vue";
+
+export default defineComponent({
+  components: { WinnerStyle },
+  name: "FlowDraw",
+  props: {
+    list: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+  },
+  // setup: () => {
+  //   const list = reactive([]);
+
+  //   return { list };
+  // },
+});
+</script>
+
+<style lang="scss" scoped>
+.move-0 {
+  transform: translate(calc(50vw - 105px), 120px) !important;
+  animation-delay: 0s;
+}
+
+.move-4 {
+  transform: translate(calc(50vw - 105px), -120px) !important;
+  animation-delay: 0.1s;
+}
+
+.move-1 {
+  transform: translate(calc(25vw - 100px), 120px) !important;
+  animation-delay: 0.2s;
+}
+
+.move-5 {
+  transform: translate(calc(25vw - 100px), -120px) !important;
+  animation-delay: 0.3s;
+}
+
+.move-2 {
+  transform: translate(-95px, 120px) !important;
+  animation-delay: 0.4s;
+}
+
+.move-6 {
+  transform: translate(-95px, -120px) !important;
+  animation-delay: 0.5s;
+}
+
+.move-3 {
+  transform: translate(calc(-25vw - 90px), 120px) !important;
+  animation-delay: 0.6s;
+}
+
+.move-7 {
+  transform: translate(calc(-25vw - 90px), -120px) !important;
+  animation-delay: 0.7s;
+}
+
+.cards-panel {
+  margin: 70px 10px 80px;
+  transform: translate3d(0, 0, 0);
+  .card-item {
+    margin: 20px 11px;
+    width: 160px;
+    height: 200px;
+    transition: 0.5s all ease-in-out;
+    transform-style: preserve-3d;
+
+    .card {
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+    }
+    .front {
+      transition: 0.5s all ease-in-out;
+      transform: rotateY(0);
+      z-index: 2;
+    }
+    .loser {
+      background: rgba($color: #000000, $alpha: 0.5);
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+    .back {
+      background-image: url("../assets/images/card_back_bg.png");
+      transition: 0.5s all ease-in-out;
+      transform: rotateY(180deg);
+      z-index: 1;
+      img {
+        margin: 30px 22px;
+        width: 117px;
+        height: 117px;
+        animation-delay: 0.3s !important;
+      }
+    }
+    .normal {
+      background-image: url("../assets/images/card_positive_bg.png");
+    }
+    .empty {
+      background-image: url("../assets/images/card_thanks_img.png");
+    }
+    &.turn {
+      .front {
+        transform: rotateY(180deg);
+        z-index: 1;
+      }
+      .back {
+        transform: rotateY(0);
+        z-index: 2;
+      }
+      .back-img-ani {
+        animation: scale 1.2s 0.2s infinite;
+        @keyframes scale {
+          0%,
+          100% {
+            transform: scale(0.9);
+          }
+          50% {
+            transform: scale(1);
+          }
+        }
+      }
+    }
+    .name {
+      margin: 14px;
+      font-size: 28px;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 700;
+      color: #eb3737;
+    }
+  }
+}
+
+.btn-panel {
+  width: 570px;
+  height: 88px;
+  background: #ffd917;
+  border-radius: 44px;
+  font-size: 34px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 700;
+  color: #1d2556;
+}
+
+.btn-ani {
+  animation: scale 1.2s infinite;
+  @keyframes scale {
+    0%,
+    100% {
+      transform: scale(0.96);
+    }
+    50% {
+      transform: scale(1);
+    }
+  }
+}
+
+.check-prize {
+  padding: 25px 0;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 40px;
+}
+</style>
