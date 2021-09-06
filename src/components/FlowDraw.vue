@@ -43,27 +43,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import WinnerStyle from "./WinnerStyle.vue";
+import { debounce } from "lodash";
+
+interface IList {
+  name: string;
+}
+
+interface IPrize extends IList {
+  id: number;
+  turn: number | boolean;
+  is_empty: number | boolean;
+}
 
 export default defineComponent({
   components: { WinnerStyle },
   name: "FlowDraw",
-  // props: {
-  //   // 奖品列表
-  //   list: {
-  //     type: Array,
-  //     default: function () {
-  //       return [];
-  //     },
-  //   },
-  //   // 抽奖次数
-  //   drawNumber: {
-  //     type: Number,
-  //     default: 0,
-  //   },
-  // },
   props: ["list", "drawNumber"],
+  emits: ["update:list", "update:drawNumber", "close"],
   setup: (props, context) => {
     // 锁
     let lock = false;
@@ -73,6 +71,19 @@ export default defineComponent({
     const turn = ref(false);
     // 移动
     const move = ref(false);
+    // 中奖id
+    const winner_id = ref<number | null>(null);
+    // 中奖信息
+    const prize = ref<IPrize>({
+      id: 0,
+      name: "",
+      turn: false,
+      is_empty: 0,
+    });
+    // 点击的index
+    const click_index = ref(5);
+
+    let prize_index = 0;
 
     const shuffling = async () => {
       // 我知道啦，关闭蒙层
@@ -81,22 +92,22 @@ export default defineComponent({
         return;
       }
 
-      if (lock || turn.value || !props.drawNumber.value) return;
+      if (lock || turn.value || !props.drawNumber) return;
 
       // 重置信息
-      // winner_id.value = null;
-      // prize.value = {
-      //   id: 0,
-      //   name: "",
-      //   is_empty: 0,
-      //   turn: false,
-      // };
+      winner_id.value = null;
+      prize.value = {
+        id: 0,
+        name: "",
+        turn: false,
+        is_empty: 0,
+      };
 
       // 锁，不让重复点击
       lock = true;
       // 第一步，洗牌
       turn.value = !turn.value;
-      // turnAllPrizes(true);
+      turnAllPrizes(true);
 
       // 第二步，卡牌打乱
       await moving();
@@ -107,10 +118,74 @@ export default defineComponent({
     /**
      * 翻转所有卡牌
      */
-    // const turnAllPrizes = (turn: boolean) =>
-    //   props.list.value.forEach((item: any) => {
-    //     item.turn = turn;
-    //   });
+    const turnAllPrizes = (turn: boolean) => {
+      const list = props.list;
+      const newList = list.map((item: IPrize) => {
+        item.turn = turn;
+        return item;
+      });
+      context.emit("update:list", newList);
+    };
+
+    /**
+     * 抽奖
+     */
+    const lottery = debounce(
+      async (click: number) => {
+        // 执行动画时，不许点击
+        console.log("lock", lock);
+
+        if (lock) return;
+
+        const prize_id = 2;
+        click_index.value = click;
+        dealPrizes(prize_id);
+      },
+      500,
+      {
+        leading: true,
+        trailing: false,
+      }
+    );
+
+    /**
+     * 处理奖品
+     */
+    const dealPrizes = (prize_id: number) => {
+      const list = props.list;
+      // 获取中奖的奖品
+      const newList = list.forEach((item: IPrize, index: number) => {
+        if (item.id === prize_id) {
+          // 防止动画延迟
+          setTimeout(() => {
+            item.is_empty
+              ? (winner_id.value = -1)
+              : (winner_id.value = click_index.value);
+          }, 500);
+          prize.value = item;
+          prize_index = index;
+        }
+      });
+
+      // 置换prize_index和click_index位置
+      const temp = newList[click_index.value];
+      newList[click_index.value] = newList[prize_index];
+      newList[prize_index] = temp;
+
+      turn.value = !turn.value;
+      // 点击的index先翻转
+      newList[click_index.value].turn = false;
+
+      context.emit("update:list", newList);
+
+      // 其余的0.5s后翻转
+      setTimeout(() => {
+        turnAllPrizes(false);
+      }, 500);
+      isFirst.value = false;
+      context.emit("update:drawNumber", props.drawNumber - 1);
+      // store.commit("SET_LUCKY_DRAW_NUMBER", drawNumber.value - 1);
+    };
 
     /**
      * 打乱牌组
@@ -131,7 +206,26 @@ export default defineComponent({
       });
     };
 
-    return { isFirst, shuffling };
+    /**
+     * 初始化列表
+     */
+    const initList = () => {
+      const list = props.list;
+      const newList = list.map((item: IList, index: number) => {
+        return {
+          ...item,
+          turn: false,
+          id: index,
+        };
+      });
+      context.emit("update:list", newList);
+    };
+
+    onMounted(() => {
+      initList();
+    });
+
+    return { isFirst, shuffling, move, turn, winner_id, prize, lottery };
   },
 });
 </script>

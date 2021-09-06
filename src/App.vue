@@ -1,9 +1,9 @@
 <template>
-  <flow-draw :list="list" :drawNumber="10" />
+  <flow-draw v-model:list="list" v-model:drawNumber="drawNumber" />
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import FlowDraw from "./components/FlowDraw.vue";
 
 export default defineComponent({
@@ -15,15 +15,14 @@ export default defineComponent({
     const list = reactive([
       {
         name: "奖品1",
-        is_empty: 0,
       },
       {
         name: "奖品2",
-        is_empty: 0,
       },
     ]);
+    const drawNumber = ref(10);
 
-    return { list };
+    return { list, drawNumber };
   },
 });
 </script>
