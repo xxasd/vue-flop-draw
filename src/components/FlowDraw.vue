@@ -45,7 +45,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import WinnerStyle from "./WinnerStyle.vue";
-import { debounce } from "lodash";
+import { debounce, shuffle } from "lodash";
 
 interface IList {
   name: string;
@@ -154,7 +154,7 @@ export default defineComponent({
     const dealPrizes = (prize_id: number) => {
       const list = props.list;
       // 获取中奖的奖品
-      const newList = list.forEach((item: IPrize, index: number) => {
+      list.forEach((item: IPrize, index: number) => {
         if (item.id === prize_id) {
           // 防止动画延迟
           setTimeout(() => {
@@ -168,23 +168,23 @@ export default defineComponent({
       });
 
       // 置换prize_index和click_index位置
-      const temp = newList[click_index.value];
-      newList[click_index.value] = newList[prize_index];
-      newList[prize_index] = temp;
+      const temp = list[click_index.value];
+      list[click_index.value] = list[prize_index];
+      list[prize_index] = temp;
 
       turn.value = !turn.value;
       // 点击的index先翻转
-      newList[click_index.value].turn = false;
+      list[click_index.value].turn = false;
 
-      context.emit("update:list", newList);
+      context.emit("update:list", list);
 
       // 其余的0.5s后翻转
       setTimeout(() => {
         turnAllPrizes(false);
       }, 500);
       isFirst.value = false;
+
       context.emit("update:drawNumber", props.drawNumber - 1);
-      // store.commit("SET_LUCKY_DRAW_NUMBER", drawNumber.value - 1);
     };
 
     /**
@@ -214,18 +214,18 @@ export default defineComponent({
       const newList = list.map((item: IList, index: number) => {
         return {
           ...item,
-          turn: false,
           id: index,
+          turn: false,
+          is_empty: 0,
         };
       });
-      context.emit("update:list", newList);
+
+      context.emit("update:list", shuffle(newList));
     };
 
-    onMounted(() => {
-      initList();
-    });
+    onMounted(() => initList());
 
-    return { isFirst, shuffling, move, turn, winner_id, prize, lottery };
+    return { isFirst, shuffling, move, turn, winner_id, click_index, prize, lottery };
   },
 });
 </script>
