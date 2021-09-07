@@ -1,17 +1,23 @@
 <template>
-  <flow-draw v-model:list="list" v-model:drawNumber="drawNumber" />
+  <!-- <flow-draw v-model:list="list" v-model:drawNumber="drawNumber" /> -->
+  <flow-draw v-if="!isExample" v-model:list="list" v-model:drawNumber="drawNumber" />
+  <flow-draw-example v-else v-model:list="list" />
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import FlowDraw from "./components/FlowDraw.vue";
+import FlowDrawExample from "./components/FlowDrawExample.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     FlowDraw,
+    FlowDrawExample,
   },
   setup: () => {
+    const isExample = ref(true);
+
     const list = reactive([
       {
         name: "66矿石",
@@ -35,24 +41,28 @@ export default defineComponent({
       },
       {
         name: "乐高海洋巨轮",
-        img: 'https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/aabe49b0d5c741fa8d92ff94cd17cb90~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp'
+        img:
+          "https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/aabe49b0d5c741fa8d92ff94cd17cb90~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp",
       },
       {
         name: "掘金马克杯",
-        img: 'https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab31c183950541d4a0731c0b8765b173~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp'
+        img:
+          "https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab31c183950541d4a0731c0b8765b173~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp",
       },
       {
         name: "Yoyo抱枕",
-        img: 'https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/33f4d465a6a9462f9b1b19b3104c8f91~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp'
+        img:
+          "https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/33f4d465a6a9462f9b1b19b3104c8f91~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp",
       },
       {
         name: "Switch",
-        img: 'https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4decbd721b2b48098a1ecf879cfca677~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp'
+        img:
+          "https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4decbd721b2b48098a1ecf879cfca677~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp",
       },
     ]);
     const drawNumber = ref(10);
 
-    return { list, drawNumber };
+    return { list, drawNumber, isExample };
   },
 });
 </script>

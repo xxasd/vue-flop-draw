@@ -42,7 +42,7 @@
       :style="turn ? 'opacity: 0' : ''"
       @click="shuffling"
     >
-      {{ isFirst ? "开始洗牌" : "再抽一次" }}
+      {{ isFirst ? "开始抽奖" : "再抽一次" }}
     </div>
   </div>
 </template>
@@ -178,7 +178,6 @@ export default defineComponent({
       list[click_index.value] = list[prize_index];
       list[prize_index] = temp;
 
-      turn.value = !turn.value;
       // 点击的index先翻转
       list[click_index.value].turn = false;
 
@@ -187,6 +186,7 @@ export default defineComponent({
       // 其余的0.5s后翻转
       setTimeout(() => {
         turnAllPrizes(false);
+        turn.value = !turn.value;
       }, 500);
       isFirst.value = false;
 
