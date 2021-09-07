@@ -12,28 +12,33 @@
 
         <!-- 正面样式 -->
         <div
-          class="card front absolute bg-no-repeat bg-cover flex items-center justify-center"
+          class="card front absolute bg-no-repeat bg-cover flex flex-col items-center justify-center"
           :class="{ normal: !item.is_empty, empty: item.is_empty }"
         >
           <div v-if="winner_id && click_index !== index" class="loser absolute"></div>
+
+          <!-- 图片 -->
+          <img v-if="item.img" class="card-img" :src="item.img" />
+
           <div class="name text-center" :style="item.is_empty ? 'opacity: 0' : ''">
             {{ item.name }}
           </div>
         </div>
         <!-- 背面样式 -->
         <div class="card">
-          <div class="card back absolute bg-no-repeat bg-cover" @click="lottery(index)">
-            <img
-              src="@/assets/images/card_text_img.png"
-              :class="turn ? 'back-img-ani' : ''"
-            />
+          <div
+            class="card back absolute bg-cover overflow-hidden"
+            @click="lottery(index)"
+          >
+            <!-- 背景 -->
+            <div class="ignore-back-size"></div>
           </div>
         </div>
       </div>
     </div>
 
     <div
-      class="btn-panel btn-ani flex items-center justify-center"
+      class="btn-panel m-auto flex items-center justify-center"
       :style="turn ? 'opacity: 0' : ''"
       @click="shuffling"
     >
@@ -49,6 +54,7 @@ import { debounce, shuffle } from "lodash";
 
 interface IList {
   name: string;
+  img?: string;
 }
 
 interface IPrize extends IList {
@@ -231,6 +237,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+$main-background-color: #e8f3ff;
+$back-background-color: #ffe6a6;
+$main-color: #1d7dfa;
+
 .move-0 {
   transform: translate(calc(50vw - 105px), 120px) !important;
   animation-delay: 0s;
@@ -285,6 +295,11 @@ export default defineComponent({
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
+
+      .card-img {
+        width: 50px;
+        height: 50px;
+      }
     }
     .front {
       transition: 0.5s all ease-in-out;
@@ -297,20 +312,26 @@ export default defineComponent({
       height: 100%;
       border-radius: 10px;
     }
+
     .back {
-      background-image: url("../assets/images/card_back_bg.png");
+      background-color: $back-background-color;
+      border-radius: 10px;
       transition: 0.5s all ease-in-out;
       transform: rotateY(180deg);
       z-index: 1;
-      img {
-        margin: 30px 22px;
-        width: 117px;
-        height: 117px;
-        animation-delay: 0.3s !important;
-      }
+    }
+    .ignore-back-size {
+      background-size: 20px 20px;
+      background-image: linear-gradient(90deg, #fff 3%, transparent 0),
+        linear-gradient(1turn, #fff 3%, transparent 0);
+      transform: rotate(45deg) translateX(-60px);
+      background-position: 50%;
+      width: 200%;
+      height: 200%;
     }
     .normal {
-      background-image: url("../assets/images/card_positive_bg.png");
+      background: $main-background-color;
+      border-radius: 10px;
     }
     .empty {
       background-image: url("../assets/images/card_thanks_img.png");
@@ -338,11 +359,10 @@ export default defineComponent({
       }
     }
     .name {
-      margin: 14px;
-      font-size: 28px;
+      margin: 10px 0 0;
+      font-size: 12px;
       font-family: PingFangSC-Semibold, PingFang SC;
-      font-weight: 700;
-      color: #eb3737;
+      color: #d25f00;
     }
   }
 }
@@ -350,25 +370,13 @@ export default defineComponent({
 .btn-panel {
   width: 570px;
   height: 88px;
-  background: #ffd917;
+  background: $main-background-color;
   border-radius: 44px;
   font-size: 34px;
   font-family: PingFangSC-Semibold, PingFang SC;
   font-weight: 700;
-  color: #1d2556;
-}
-
-.btn-ani {
-  animation: scale 1.2s infinite;
-  @keyframes scale {
-    0%,
-    100% {
-      transform: scale(0.96);
-    }
-    50% {
-      transform: scale(1);
-    }
-  }
+  letter-spacing: 4px;
+  color: $main-color;
 }
 
 .check-prize {
