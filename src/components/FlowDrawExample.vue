@@ -17,6 +17,7 @@
           {{ item.name }}
         </div>
       </div>
+
       <!-- 背面样式 -->
       <div class="card">
         <div class="card back absolute bg-cover overflow-hidden" @click="lottery(index)">
@@ -54,7 +55,7 @@ export default defineComponent({
         return {
           ...item,
           id: index,
-          turn: false,
+          turn: true,
           is_empty: 0,
         };
       });

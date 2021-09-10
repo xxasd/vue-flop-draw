@@ -16,7 +16,7 @@ export default defineComponent({
     FlowDrawExample,
   },
   setup: () => {
-    const isExample = ref(true);
+    const isExample = ref(false);
 
     const list = reactive([
       {

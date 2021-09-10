@@ -39,7 +39,7 @@
 
     <div
       class="btn-panel m-auto flex items-center justify-center"
-      :style="turn ? 'opacity: 0' : ''"
+      :style="turning ? 'opacity: 0' : ''"
       @click="shuffling"
     >
       {{ isFirst ? "开始抽奖" : "再抽一次" }}
@@ -74,7 +74,7 @@ export default defineComponent({
     // 第一次抽奖
     let isFirst = ref(true);
     // 翻转
-    const turn = ref(false);
+    const turning = ref(false);
     // 移动
     const move = ref(false);
     // 中奖id
@@ -98,7 +98,7 @@ export default defineComponent({
         return;
       }
 
-      if (lock || turn.value || !props.drawNumber) return;
+      if (lock || turning.value || !props.drawNumber) return;
 
       // 重置信息
       winner_id.value = null;
@@ -112,13 +112,13 @@ export default defineComponent({
       // 锁，不让重复点击
       lock = true;
       // 第一步，洗牌
-      turn.value = !turn.value;
+      turning.value = !turning.value;
       turnAllPrizes(true);
 
       // 第二步，卡牌打乱
       await moving();
       // 第三步，卡牌回正
-      await moving(false);
+      // await moving(false);
     };
 
     /**
@@ -186,7 +186,7 @@ export default defineComponent({
       // 其余的0.5s后翻转
       setTimeout(() => {
         turnAllPrizes(false);
-        turn.value = !turn.value;
+        turning.value = !turning.value;
       }, 500);
       isFirst.value = false;
 
@@ -231,7 +231,7 @@ export default defineComponent({
 
     onMounted(() => initList());
 
-    return { isFirst, shuffling, move, turn, winner_id, click_index, prize, lottery };
+    return { isFirst, shuffling, move, turning, winner_id, click_index, prize, lottery };
   },
 });
 </script>
@@ -240,54 +240,59 @@ export default defineComponent({
 $main-background-color: #e8f3ff;
 $back-background-color: #ffe6a6;
 $main-color: #1d7dfa;
+$card-width: 160px;
+$card-height: 200px;
+$card-margin-tb: 20px;
+$card-margin-lr: 13px;
+$half-width: 50vw;
 
 .move-0 {
-  transform: translate(calc(50vw - 105px), 120px) !important;
+  transform: translate(calc(50vw - 80px), 120px) !important;
   animation-delay: 0s;
 }
 
 .move-4 {
-  transform: translate(calc(50vw - 105px), -120px) !important;
+  transform: translate(calc(50vw - 80px), -120px) !important;
   animation-delay: 0.1s;
 }
 
 .move-1 {
-  transform: translate(calc(25vw - 100px), 120px) !important;
+  transform: translate(calc(25vw - 80px), 120px) !important;
   animation-delay: 0.2s;
 }
 
 .move-5 {
-  transform: translate(calc(25vw - 100px), -120px) !important;
+  transform: translate(calc(25vw - 80px), -120px) !important;
   animation-delay: 0.3s;
 }
 
 .move-2 {
-  transform: translate(-95px, 120px) !important;
+  transform: translate(-80px, 120px) !important;
   animation-delay: 0.4s;
 }
 
 .move-6 {
-  transform: translate(-95px, -120px) !important;
+  transform: translate(-80px, -120px) !important;
   animation-delay: 0.5s;
 }
 
 .move-3 {
-  transform: translate(calc(-25vw - 90px), 120px) !important;
+  transform: translate(calc(-25vw - 80px), 120px) !important;
   animation-delay: 0.6s;
 }
 
 .move-7 {
-  transform: translate(calc(-25vw - 90px), -120px) !important;
+  transform: translate(calc(-25vw - 80px), -120px) !important;
   animation-delay: 0.7s;
 }
 
 .cards-panel {
-  margin: 70px 10px 80px;
+  margin: 70px 0 80px;
   transform: translate3d(0, 0, 0);
   .card-item {
-    margin: 20px 11px;
-    width: 160px;
-    height: 200px;
+    margin: $card-margin-tb $card-margin-lr;
+    width: $card-width;
+    height: $card-height;
     transition: 0.5s all ease-in-out;
     transform-style: preserve-3d;
 
