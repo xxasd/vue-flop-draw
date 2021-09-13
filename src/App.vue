@@ -4,16 +4,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import FlowDraw from "./components/FlowDraw.vue";
 
 export default defineComponent({
   name: "App",
-  components: {
-    FlowDraw,
-  },
+  components: { FlowDraw },
   setup: () => {
-    const list = reactive([
+    const list = ref([
       {
         name: "66矿石",
         img:

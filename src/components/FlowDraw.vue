@@ -9,15 +9,12 @@
       >
         <!-- 正面样式 -->
         <div
-          class="card front absolute bg-no-repeat bg-cover flex flex-col items-center justify-center"
-          :class="{ normal: !item.is_empty, empty: item.is_empty }"
+          class="card front normal absolute bg-no-repeat bg-cover flex flex-col items-center justify-center"
         >
-          <div v-if="winner_id && click_index !== index" class="loser absolute"></div>
-
           <!-- 图片 -->
           <img v-if="item.img" class="card-img" :src="item.img" />
 
-          <div class="name text-center" :style="item.is_empty ? 'opacity: 0' : ''">
+          <div class="name text-center">
             {{ item.name }}
           </div>
         </div>
@@ -56,7 +53,6 @@ interface IList {
 interface IPrize extends IList {
   id: number;
   turn: number | boolean;
-  is_empty: number | boolean;
 }
 
 export default defineComponent({
@@ -72,19 +68,8 @@ export default defineComponent({
     const turning = ref(false);
     // 移动
     const move = ref(false);
-    // 中奖id
-    const winner_id = ref<number | null>(null);
-    // 中奖信息
-    const prize = ref<IPrize>({
-      id: 0,
-      name: "",
-      turn: false,
-      is_empty: 0,
-    });
     // 点击的index
-    const click_index = ref(5);
-
-    let prize_index = 0;
+    const click_index = ref(0);
 
     const shuffling = async () => {
       // 我知道啦，关闭蒙层
@@ -95,15 +80,6 @@ export default defineComponent({
 
       if (lock || turning.value || !props.drawNumber) return;
 
-      // 重置信息
-      winner_id.value = null;
-      prize.value = {
-        id: 0,
-        name: "",
-        turn: false,
-        is_empty: 0,
-      };
-
       // 锁，不让重复点击
       lock = true;
       // 第一步，洗牌
@@ -112,6 +88,10 @@ export default defineComponent({
 
       // 第二步，卡牌打乱
       await moving();
+
+      // 二次洗牌
+      context.emit("update:list", shuffle(props.list));
+
       // 第三步，卡牌回正
       await moving(false);
     };
@@ -125,6 +105,7 @@ export default defineComponent({
         item.turn = turn;
         return item;
       });
+
       context.emit("update:list", newList);
     };
 
@@ -132,15 +113,12 @@ export default defineComponent({
      * 抽奖
      */
     const lottery = debounce(
-      async (click: number) => {
+      (click: number) => {
         // 执行动画时，不许点击
-        console.log("lock", lock);
-
         if (lock) return;
 
-        const prize_id = 2;
         click_index.value = click;
-        dealPrizes(prize_id);
+        dealPrizes();
       },
       500,
       {
@@ -152,33 +130,15 @@ export default defineComponent({
     /**
      * 处理奖品
      */
-    const dealPrizes = (prize_id: number) => {
+    const dealPrizes = () => {
       const list = props.list;
-      // 获取中奖的奖品
-      list.forEach((item: IPrize, index: number) => {
-        if (item.id === prize_id) {
-          // 防止动画延迟
-          setTimeout(() => {
-            item.is_empty
-              ? (winner_id.value = -1)
-              : (winner_id.value = click_index.value);
-          }, 500);
-          prize.value = item;
-          prize_index = index;
-        }
-      });
 
-      // 置换prize_index和click_index位置
-      const temp = list[click_index.value];
-      list[click_index.value] = list[prize_index];
-      list[prize_index] = temp;
-
-      // 点击的index先翻转
+      // 点击的 index 先翻转
       list[click_index.value].turn = false;
 
       context.emit("update:list", list);
 
-      // 其余的0.5s后翻转
+      // 其余的 0.5s 后翻转
       setTimeout(() => {
         turnAllPrizes(false);
         turning.value = !turning.value;
@@ -217,7 +177,6 @@ export default defineComponent({
           ...item,
           id: index,
           turn: false,
-          is_empty: 0,
         };
       });
 
@@ -230,9 +189,6 @@ export default defineComponent({
       isFirst,
       move,
       turning,
-      winner_id,
-      click_index,
-      prize,
       lottery,
       shuffling,
     };
