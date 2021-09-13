@@ -4,23 +4,37 @@
       <div
         v-for="(item, index) in list"
         :key="index"
-        class="card-item inline-flex items-center justify-center"
+        class="card-item inline-flex flex-1 items-center justify-center"
         :class="[item.turn ? 'turn' : '', move ? `move-${index}` : '']"
       >
         <!-- 中奖样式 -->
-        <winner-style v-if="winner_id && winner_id === index" />
+        <!-- <winner-style v-if="winner_id && winner_id === index" /> -->
 
         <!-- 正面样式 -->
         <div
-          class="card front absolute bg-no-repeat bg-cover flex flex-col items-center justify-center"
+          class="
+            card
+            front
+            absolute
+            bg-no-repeat bg-cover
+            flex flex-col
+            items-center
+            justify-center
+          "
           :class="{ normal: !item.is_empty, empty: item.is_empty }"
         >
-          <div v-if="winner_id && click_index !== index" class="loser absolute"></div>
+          <div
+            v-if="winner_id && click_index !== index"
+            class="loser absolute"
+          ></div>
 
           <!-- 图片 -->
           <img v-if="item.img" class="card-img" :src="item.img" />
 
-          <div class="name text-center" :style="item.is_empty ? 'opacity: 0' : ''">
+          <div
+            class="name text-center"
+            :style="item.is_empty ? 'opacity: 0' : ''"
+          >
             {{ item.name }}
           </div>
         </div>
@@ -49,7 +63,6 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
-import WinnerStyle from "./WinnerStyle.vue";
 import { debounce, shuffle } from "lodash";
 
 interface IList {
@@ -64,9 +77,9 @@ interface IPrize extends IList {
 }
 
 export default defineComponent({
-  components: { WinnerStyle },
+  // components: { WinnerStyle },
   name: "FlowDraw",
-  props: ["list", "drawNumber"],
+  props: ["list", "drawNumber", "row", "col"],
   emits: ["update:list", "update:drawNumber", "close"],
   setup: (props, context) => {
     // 锁
@@ -231,58 +244,68 @@ export default defineComponent({
 
     onMounted(() => initList());
 
-    return { isFirst, shuffling, move, turning, winner_id, click_index, prize, lottery };
+    return {
+      isFirst,
+      move,
+      turning,
+      winner_id,
+      click_index,
+      prize,
+      lottery,
+      shuffling,
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@use"sass.math";
+
 $main-background-color: #e8f3ff;
 $back-background-color: #ffe6a6;
 $main-color: #1d7dfa;
-$card-width: 160px;
-$card-height: 200px;
+$card-height: 220px;
 $card-margin-tb: 20px;
-$card-margin-lr: 13px;
-$half-width: 50vw;
+$card-margin-lr: 10px;
+$half-width: 50;
 
-.move-0 {
-  transform: translate(calc(50vw - 80px), 120px) !important;
-  animation-delay: 0s;
+@function numberSymbol($i) {
+  @return if($i == 0, math.div($card-height, 2), -math.div($card-height, 2));
 }
 
-.move-4 {
-  transform: translate(calc(50vw - 80px), -120px) !important;
-  animation-delay: 0.1s;
+@for $i from 0 through 7 {
+  @if $i == 0 or $i == 4 {
+    .move-#{$i} {
+      transform: translate(calc(#{$half-width}vw - 80px), numberSymbol($i));
+      animation-delay: #{$i}s;
+    }
+  }
 }
 
 .move-1 {
-  transform: translate(calc(25vw - 80px), 120px) !important;
+  transform: translate(calc(25vw - 80px), 110px) !important;
   animation-delay: 0.2s;
 }
-
 .move-5 {
-  transform: translate(calc(25vw - 80px), -120px) !important;
+  transform: translate(calc(25vw - 80px), -110px) !important;
   animation-delay: 0.3s;
 }
 
 .move-2 {
-  transform: translate(-80px, 120px) !important;
+  transform: translate(-80px, 110px) !important;
   animation-delay: 0.4s;
 }
-
 .move-6 {
-  transform: translate(-80px, -120px) !important;
+  transform: translate(-80px, -110px) !important;
   animation-delay: 0.5s;
 }
 
 .move-3 {
-  transform: translate(calc(-25vw - 80px), 120px) !important;
+  transform: translate(calc(-25vw - 80px), 110px) !important;
   animation-delay: 0.6s;
 }
-
 .move-7 {
-  transform: translate(calc(-25vw - 80px), -120px) !important;
+  transform: translate(calc(-25vw - 80px), -110px) !important;
   animation-delay: 0.7s;
 }
 
@@ -290,17 +313,15 @@ $half-width: 50vw;
   margin: 70px 0 80px;
   transform: translate3d(0, 0, 0);
   .card-item {
-    margin: $card-margin-tb $card-margin-lr;
-    width: $card-width;
+    flex-basis: 25%;
     height: $card-height;
     transition: 0.5s all ease-in-out;
     transform-style: preserve-3d;
 
     .card {
-      width: 100%;
-      height: 100%;
+      width: 90%;
+      height: 90%;
       backface-visibility: hidden;
-
       .card-img {
         width: 50px;
         height: 50px;
