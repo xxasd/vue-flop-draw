@@ -129,7 +129,7 @@ export default defineComponent({
       // 第二步，卡牌打乱
       await moving();
       // 第三步，卡牌回正
-      // await moving(false);
+      await moving(false);
     };
 
     /**
@@ -257,7 +257,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-// @use "sass.math";
+@use "sass:math";
 
 $main-background-color: #e8f3ff;
 $back-background-color: #ffe6a6;
@@ -267,30 +267,21 @@ $card-margin-tb: 20px;
 $card-margin-lr: 10px;
 $half-width: 50;
 
-@function numberSymbol($i) {
-  @return if($i < 4, $card-height / 2, -($card-height / 2));
+@function moveTranslateY($i) {
+  @return if($i < 4, math.div($card-height, 2), -(math.div($card-height, 2)));
+}
+
+@function moveTranslateX($i) {
+  @return if(
+    $i < 4,
+    (calc(#{$half-width - $i * 25}vw - 50%)),
+    (calc(#{$half-width - ($i - 4) * 25}vw - 50%))
+  );
 }
 
 @for $i from 0 through 7 {
-  @if $i == 0 or $i == 4 {
-    .move-#{$i} {
-      transform: translate(calc(#{$half-width}vw - 80px), numberSymbol($i));
-    }
-  }
-  @if $i == 1 or $i == 5 {
-    .move-#{$i} {
-      transform: translate(calc(#{$half-width / 2}vw - 80px), numberSymbol($i));
-    }
-  }
-  @if $i == 2 or $i == 6 {
-    .move-#{$i} {
-      transform: translate(-80px, numberSymbol($i));
-    }
-  }
-  @if $i == 3 or $i == 7 {
-    .move-#{$i} {
-      transform: translate(calc(-25vw - 80px), numberSymbol($i));
-    }
+  .move-#{$i} {
+    transform: translate(moveTranslateX($i), moveTranslateY($i));
   }
 }
 
