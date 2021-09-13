@@ -5,36 +5,22 @@
         v-for="(item, index) in list"
         :key="index"
         class="card-item inline-flex flex-1 items-center justify-center"
-        :class="[item.turn ? 'turn' : '', move ? `move-${index}` : '']"
+        :class="[item.turn ? 'turn' : '', move ? `move-${index.toString()}` : '']"
       >
         <!-- 中奖样式 -->
         <!-- <winner-style v-if="winner_id && winner_id === index" /> -->
 
         <!-- 正面样式 -->
         <div
-          class="
-            card
-            front
-            absolute
-            bg-no-repeat bg-cover
-            flex flex-col
-            items-center
-            justify-center
-          "
+          class="card front absolute bg-no-repeat bg-cover flex flex-col items-center justify-center"
           :class="{ normal: !item.is_empty, empty: item.is_empty }"
         >
-          <div
-            v-if="winner_id && click_index !== index"
-            class="loser absolute"
-          ></div>
+          <div v-if="winner_id && click_index !== index" class="loser absolute"></div>
 
           <!-- 图片 -->
           <img v-if="item.img" class="card-img" :src="item.img" />
 
-          <div
-            class="name text-center"
-            :style="item.is_empty ? 'opacity: 0' : ''"
-          >
+          <div class="name text-center" :style="item.is_empty ? 'opacity: 0' : ''">
             {{ item.name }}
           </div>
         </div>
@@ -42,7 +28,7 @@
         <div class="card">
           <div
             class="card back absolute bg-cover overflow-hidden"
-            @click="lottery(index)"
+            @click="lottery(Number(index))"
           >
             <!-- 背景 -->
             <div class="ignore-back-size"></div>
@@ -80,6 +66,18 @@ export default defineComponent({
   // components: { WinnerStyle },
   name: "FlowDraw",
   props: ["list", "drawNumber", "row", "col"],
+  // props: {
+  //   list: {
+  //     type: Array,
+  //     default() {
+  //       return [];
+  //     },
+  //   },
+  //   drawNumber: {
+  //     type: Number,
+  //     default: 10,
+  //   },
+  // },
   emits: ["update:list", "update:drawNumber", "close"],
   setup: (props, context) => {
     // 锁
@@ -259,7 +257,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use"sass.math";
+// @use "sass.math";
 
 $main-background-color: #e8f3ff;
 $back-background-color: #ffe6a6;
@@ -270,43 +268,30 @@ $card-margin-lr: 10px;
 $half-width: 50;
 
 @function numberSymbol($i) {
-  @return if($i == 0, math.div($card-height, 2), -math.div($card-height, 2));
+  @return if($i < 4, $card-height / 2, -($card-height / 2));
 }
 
 @for $i from 0 through 7 {
   @if $i == 0 or $i == 4 {
     .move-#{$i} {
       transform: translate(calc(#{$half-width}vw - 80px), numberSymbol($i));
-      animation-delay: #{$i}s;
     }
   }
-}
-
-.move-1 {
-  transform: translate(calc(25vw - 80px), 110px) !important;
-  animation-delay: 0.2s;
-}
-.move-5 {
-  transform: translate(calc(25vw - 80px), -110px) !important;
-  animation-delay: 0.3s;
-}
-
-.move-2 {
-  transform: translate(-80px, 110px) !important;
-  animation-delay: 0.4s;
-}
-.move-6 {
-  transform: translate(-80px, -110px) !important;
-  animation-delay: 0.5s;
-}
-
-.move-3 {
-  transform: translate(calc(-25vw - 80px), 110px) !important;
-  animation-delay: 0.6s;
-}
-.move-7 {
-  transform: translate(calc(-25vw - 80px), -110px) !important;
-  animation-delay: 0.7s;
+  @if $i == 1 or $i == 5 {
+    .move-#{$i} {
+      transform: translate(calc(#{$half-width / 2}vw - 80px), numberSymbol($i));
+    }
+  }
+  @if $i == 2 or $i == 6 {
+    .move-#{$i} {
+      transform: translate(-80px, numberSymbol($i));
+    }
+  }
+  @if $i == 3 or $i == 7 {
+    .move-#{$i} {
+      transform: translate(calc(-25vw - 80px), numberSymbol($i));
+    }
+  }
 }
 
 .cards-panel {

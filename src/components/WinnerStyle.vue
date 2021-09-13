@@ -1,15 +1,17 @@
 <template>
-  <!-- 中奖背景图一 -->
-  <div class="aperture absolute bg-no-repeat bg-cover"></div>
-  <!-- 中奖背景图二 -->
-  <div class="halo absolute bg-no-repeat bg-cover"></div>
-  <!-- 星星一 -->
-  <div
-    v-for="(item, index) in stars"
-    :key="index"
-    class="star-bg absolute bg-no-repeat bg-cover"
-    :class="`star-${index}`"
-  ></div>
+  <div>
+    <!-- 中奖背景图一 -->
+    <div class="aperture absolute bg-no-repeat bg-cover"></div>
+    <!-- 中奖背景图二 -->
+    <div class="halo absolute bg-no-repeat bg-cover"></div>
+    <!-- 星星一 -->
+    <div
+      v-for="(item, index) in stars"
+      :key="index"
+      class="star-bg absolute bg-no-repeat bg-cover"
+      :class="`star-${index}`"
+    ></div>
+  </div>
 </template>
 
 <script lang="ts">
