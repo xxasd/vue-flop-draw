@@ -7,9 +7,6 @@
         class="card-item inline-flex flex-1 items-center justify-center"
         :class="[item.turn ? 'turn' : '', move ? `move-${index.toString()}` : '']"
       >
-        <!-- 中奖样式 -->
-        <!-- <winner-style v-if="winner_id && winner_id === index" /> -->
-
         <!-- 正面样式 -->
         <div
           class="card front absolute bg-no-repeat bg-cover flex flex-col items-center justify-center"
@@ -63,21 +60,8 @@ interface IPrize extends IList {
 }
 
 export default defineComponent({
-  // components: { WinnerStyle },
   name: "FlowDraw",
-  props: ["list", "drawNumber", "row", "col"],
-  // props: {
-  //   list: {
-  //     type: Array,
-  //     default() {
-  //       return [];
-  //     },
-  //   },
-  //   drawNumber: {
-  //     type: Number,
-  //     default: 10,
-  //   },
-  // },
+  props: ["list", "drawNumber"],
   emits: ["update:list", "update:drawNumber", "close"],
   setup: (props, context) => {
     // 锁
