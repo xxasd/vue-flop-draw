@@ -57,8 +57,8 @@ interface IPrize extends IList {
 
 export default defineComponent({
   name: "FlowDraw",
-  props: ["list", "drawNumber"],
-  emits: ["update:list", "update:drawNumber", "close"],
+  props: ["list"],
+  emits: ["update:list"],
   setup: (props, context) => {
     // 锁
     let lock = false;
@@ -72,13 +72,7 @@ export default defineComponent({
     const click_index = ref(0);
 
     const shuffling = async () => {
-      // 我知道啦，关闭蒙层
-      if (!isFirst.value && !props.drawNumber) {
-        context.emit("close");
-        return;
-      }
-
-      if (lock || turning.value || !props.drawNumber) return;
+      if (lock || turning.value) return;
 
       // 锁，不让重复点击
       lock = true;
@@ -144,8 +138,6 @@ export default defineComponent({
         turning.value = !turning.value;
       }, 500);
       isFirst.value = false;
-
-      context.emit("update:drawNumber", props.drawNumber - 1);
     };
 
     /**

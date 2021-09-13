@@ -1,6 +1,5 @@
 <template>
-  <!-- <flow-draw v-model:list="list" v-model:drawNumber="drawNumber" /> -->
-  <flow-draw v-model:list="list" v-model:drawNumber="drawNumber" />
+  <flow-draw v-model:list="list" />
 </template>
 
 <script lang="ts">
