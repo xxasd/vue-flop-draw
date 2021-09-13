@@ -1,7 +1,19 @@
 {
-  "name": "vfd",
+  "name": "vue-flop-draw",
   "version": "0.1.0",
-  "private": true,
+  "description": "Vue version of the flop draw component",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xxasd/vue-flop-draw"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/flop-draw.min.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

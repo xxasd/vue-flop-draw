@@ -4,7 +4,7 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: { path: ["./src/*"] },
     "postcss-px-to-viewport": {
-      viewportWidth: 750, // viewportUnit: 'vmin',
+      viewportWidth: 750, // viewportUnit: 'vmin',
       viewportUnit: "vw",
       minPixelValue: 1,
       fontViewportUnit: "vw",
