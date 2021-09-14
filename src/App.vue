@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import FlowDraw from "./packages/FlowDraw.vue";
+import FlowDraw from "./packages/flow-draw/src/flow-draw.vue";
 
 export default defineComponent({
   name: "App",
