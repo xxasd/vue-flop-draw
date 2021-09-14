@@ -12,7 +12,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "unpkg": "dist/flop-draw.min.js",
+  "unpkg": "lib/vue-flop-draw.min.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "serve": "vue-cli-service serve",
