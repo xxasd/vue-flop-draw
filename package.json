@@ -1,6 +1,6 @@
 {
   "name": "vue-flop-draw",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue version of the flop draw component",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -10,13 +10,18 @@
     "url": "https://github.com/xxasd/vue-flop-draw"
   },
   "license": "MIT",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "unpkg": "lib/vue-flop-draw.min.js",
-  "typings": "lib/index.d.ts",
+  "main": "lib/vue-flop-draw.common.js",
+  "module": "lib/vue-flop-draw.umd.js",
+  "unpkg": "lib/vue-flop-draw.umd.min.js",
+  "typings": "typings/index.d.ts",
+  "files": [
+    "lib",
+    "typings/*.d.ts"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name vue-flop-draw --dest lib packages/components/index.ts",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
