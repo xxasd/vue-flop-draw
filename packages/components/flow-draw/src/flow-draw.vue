@@ -267,9 +267,9 @@ $half-width: 50;
       background: $main-background-color;
       border-radius: 10px;
     }
-    .empty {
-      background-image: url("../assets/images/card_thanks_img.png");
-    }
+    // .empty {
+    //   background-image: url("../assets/images/card_thanks_img.png");
+    // }
     &.turn {
       .front {
         transform: rotateY(180deg);

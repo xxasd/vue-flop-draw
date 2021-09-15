@@ -41,7 +41,7 @@ export function buildProp<
     : D
   type?: any
   validator?: ((val: any) => val is C) | ((val: any) => boolean)
-} = {}): any {
+} = {}) {
   return {
     type: type as PropType<T | C>,
     required: !!required,

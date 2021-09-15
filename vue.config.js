@@ -1,4 +1,10 @@
 // vue.config.js
 module.exports = {
-  outputDir: "lib",
+  pages: {
+    index: {
+      entry: "examples/main.ts",
+      template: "public/index.html",
+      filename: "index.html",
+    },
+  },
 };

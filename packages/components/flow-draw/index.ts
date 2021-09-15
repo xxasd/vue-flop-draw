@@ -1,5 +1,6 @@
-import FlowDraw from "./src/FlowDraw.vue";
-import { withInstall } from "@/utils/with-Install";
+import FlowDraw from "./src/flow-draw.vue";
+
+import { withInstall } from "../../utils/with-Install";
 
 export const VueFlowDraw = withInstall(FlowDraw);
 export default VueFlowDraw;

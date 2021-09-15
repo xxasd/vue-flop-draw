@@ -1,4 +1,4 @@
-import { buildProp } from '@/utils/props'
+import { buildProp } from '../../../utils/props'
 import type { ExtractPropTypes } from 'vue'
 
 export const flowDrawProps = {
