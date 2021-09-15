@@ -4,11 +4,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import FlowDraw from "../packages/components/flow-draw/index";
 
 export default defineComponent({
   name: "App",
-  components: { FlowDraw },
   setup: () => {
     const list = ref([
       {

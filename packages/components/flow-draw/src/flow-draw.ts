@@ -1,16 +1,12 @@
-import { buildProp } from '../../../utils/props'
 import type { ExtractPropTypes } from 'vue'
 
-export const flowDrawProps = {
-  value: buildProp<string | number>({
-    type: [String, Number],
-    default: '',
-  }),
+const flowDrawProps = {
   list: {
     type: Array,
     default: function() {
       return []
     },
   },
-} as const
-export type FlowDrawProps = ExtractPropTypes<typeof flowDrawProps>
+} 
+
+export type FlowDrawProps = Partial<ExtractPropTypes<typeof flowDrawProps>>
