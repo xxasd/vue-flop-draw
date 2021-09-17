@@ -191,6 +191,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 @use "sass:math";
 
+@import "../../style/index.css";
+
 $main-background-color: #e8f3ff;
 $back-background-color: #ffe6a6;
 $main-color: #1d7dfa;

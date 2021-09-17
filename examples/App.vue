@@ -50,9 +50,8 @@ export default defineComponent({
           "https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4decbd721b2b48098a1ecf879cfca677~tplv-k3u1fbpfcp-no-mark:0:0:0:0.awebp",
       },
     ]);
-    const drawNumber = ref(10);
 
-    return { list, drawNumber };
+    return { list };
   },
 });
 </script>

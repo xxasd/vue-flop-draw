@@ -1,6 +1,6 @@
 {
   "name": "vue-flop-draw",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Vue version of the flop draw component",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -17,6 +17,12 @@
   "files": [
     "lib",
     "typings/*.d.ts"
+  ],
+  "sideEffects": [
+    "components/style.ts",
+    "components/**/style/*",
+    "*.vue",
+    "*.css"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
