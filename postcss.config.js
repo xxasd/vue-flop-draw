@@ -2,7 +2,7 @@
 module.exports = {
   plugins: {
     tailwindcss: {},
-    autoprefixer: { path: ["./src/*"] },
+    autoprefixer: { path: ["./packages/*", "./examples/*"] },
     "postcss-px-to-viewport": {
       viewportWidth: 750, // viewportUnit: 'vmin',
       viewportUnit: "vw",

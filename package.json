@@ -1,6 +1,6 @@
 {
   "name": "vue-flop-draw",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Vue version of the flop draw component",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -27,7 +27,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lib": "vue-cli-service build --target lib --name vue-flop-draw --dest lib packages/components/index.ts",
+    "lib": "vue-cli-service build --target lib --name vue-flop-draw --inline-vue packages/components/index.ts",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

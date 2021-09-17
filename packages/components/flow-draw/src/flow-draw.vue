@@ -1,38 +1,38 @@
 <template>
   <div>
-    <div class="cards-panel flex flex-wrap">
+    <div class="fd-cards-panel fd-flex fd-flex-wrap">
       <div
         v-for="(item, index) in list"
         :key="index"
-        class="card-item inline-flex flex-1 items-center justify-center"
-        :class="[item.turn ? 'turn' : '', move ? `move-${index.toString()}` : '']"
+        class="fd-card-item fd-inline-flex fd-flex-1 fd-items-center fd-justify-center"
+        :class="[item.turn ? 'fd-turn' : '', move ? `fd-move-${index.toString()}` : '']"
       >
         <!-- 正面样式 -->
         <div
-          class="card front normal absolute bg-no-repeat bg-cover flex flex-col items-center justify-center"
+          class="fd-card fd-front fd-normal fd-absolute fd-bg-no-repeat fd-bg-cover fd-flex fd-flex-col fd-items-center fd-justify-center"
         >
           <!-- 图片 -->
-          <img v-if="item.img" class="card-img" :src="item.img" />
+          <img v-if="item.img" class="fd-card-img" :src="item.img" />
 
-          <div class="name text-center">
+          <div class="fd-name fd-text-center">
             {{ item.name }}
           </div>
         </div>
         <!-- 背面样式 -->
-        <div class="card">
+        <div class="fd-card">
           <div
-            class="card back absolute bg-cover overflow-hidden"
+            class="fd-card fd-back fd-absolute fd-bg-cover fd-overflow-hidden"
             @click="lottery(Number(index))"
           >
             <!-- 背景 -->
-            <div class="ignore-back-size"></div>
+            <div class="fd-ignore-back-size"></div>
           </div>
         </div>
       </div>
     </div>
 
     <div
-      class="btn-panel m-auto flex items-center justify-center"
+      class="fd-btn-panel fd-m-auto fd-flex fd-items-center fd-justify-center"
       :style="turning ? 'opacity: 0' : ''"
       @click="shuffling"
     >
@@ -214,49 +214,49 @@ $half-width: 50;
 }
 
 @for $i from 0 through 7 {
-  .move-#{$i} {
+  .fd-move-#{$i} {
     transform: translate(moveTranslateX($i), moveTranslateY($i));
   }
 }
 
-.cards-panel {
+.fd-cards-panel {
   margin: 70px 0 80px;
   transform: translate3d(0, 0, 0);
-  .card-item {
+  .fd-card-item {
     flex-basis: 25%;
     height: $card-height;
     transition: 0.5s all ease-in-out;
     transform-style: preserve-3d;
 
-    .card {
+    .fd-card {
       width: 90%;
       height: 90%;
       backface-visibility: hidden;
-      .card-img {
+      .fd-card-img {
         width: 50px;
         height: 50px;
       }
     }
-    .front {
+    .fd-front {
       transition: 0.5s all ease-in-out;
       transform: rotateY(0);
       z-index: 2;
     }
-    .loser {
+    .fd-loser {
       background: rgba($color: #000000, $alpha: 0.5);
       width: 100%;
       height: 100%;
       border-radius: 10px;
     }
 
-    .back {
+    .fd-back {
       background-color: $back-background-color;
       border-radius: 10px;
       transition: 0.5s all ease-in-out;
       transform: rotateY(180deg);
       z-index: 1;
     }
-    .ignore-back-size {
+    .fd-ignore-back-size {
       background-size: 20px 20px;
       background-image: linear-gradient(90deg, #fff 3%, transparent 0),
         linear-gradient(1turn, #fff 3%, transparent 0);
@@ -265,23 +265,23 @@ $half-width: 50;
       width: 200%;
       height: 200%;
     }
-    .normal {
+    .fd-normal {
       background: $main-background-color;
       border-radius: 10px;
     }
     // .empty {
     //   background-image: url("../assets/images/card_thanks_img.png");
     // }
-    &.turn {
-      .front {
+    &.fd-turn {
+      .fd-front {
         transform: rotateY(180deg);
         z-index: 1;
       }
-      .back {
+      .fd-back {
         transform: rotateY(0);
         z-index: 2;
       }
-      .back-img-ani {
+      .fd-back-img-ani {
         animation: scale 1.2s 0.2s infinite;
         @keyframes scale {
           0%,
@@ -294,7 +294,7 @@ $half-width: 50;
         }
       }
     }
-    .name {
+    .fd-name {
       margin: 10px 0 0;
       font-size: 12px;
       font-family: PingFangSC-Semibold, PingFang SC;
@@ -303,7 +303,7 @@ $half-width: 50;
   }
 }
 
-.btn-panel {
+.fd-btn-panel {
   width: 570px;
   height: 88px;
   background: $main-background-color;
@@ -315,7 +315,7 @@ $half-width: 50;
   color: $main-color;
 }
 
-.check-prize {
+.fd-check-prize {
   padding: 25px 0;
   font-size: 28px;
   font-family: PingFangSC-Regular, PingFang SC;
