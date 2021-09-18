@@ -1,6 +1,6 @@
 import type { ExtractPropTypes } from 'vue'
 
-const flowDrawProps = {
+export const flowDrawProps = {
   list: {
     type: Array,
     default: function() {
@@ -9,4 +9,4 @@ const flowDrawProps = {
   },
 } 
 
-export type FlowDrawProps = Partial<ExtractPropTypes<typeof flowDrawProps>>
+export type FlowDrawProps = ExtractPropTypes<typeof flowDrawProps>
