@@ -1,6 +1,6 @@
 {
   "name": "vue-flop-draw",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Vue version of the flop draw component",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -37,6 +37,7 @@
     "vue": "^3.0.4"
   },
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.2.14",
     "@types/lodash": "^4.14.172",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
@@ -46,12 +47,13 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
+    "autoprefixer": "^9",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
     "postcss": "^7",
     "postcss-px-to-viewport": "^1.1.1",
-    "sass": "^1.32.7",
-    "sass-loader": "^10",
+    "sass": "^1.41.1",
+    "sass-loader": "10.0.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "~4.1.5"
   }
