@@ -1,5 +1,5 @@
 <template>
-  <flow-draw v-model:list="list" />
+  <flop-draw v-model:list="list" />
 </template>
 
 <script lang="ts">

@@ -21,7 +21,7 @@
         <!-- 背面样式 -->
         <div class="fd-card">
           <div
-            class="fd-card fd-back fd-absolute fd-bg-cover fd-overflow-hidden"
+            class="fd-card fd-back fd-absolute fd-bg-cover fd-overflop-hidden"
             @click="lottery(Number(index))"
           >
             <!-- 背景 -->
@@ -56,7 +56,7 @@ interface IPrize extends IList {
 }
 
 export default defineComponent({
-  name: "FlowDraw",
+  name: "flopDraw",
   props: ["list"],
   emits: ["update:list"],
   setup: (props, context) => {
